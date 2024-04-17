@@ -1,0 +1,16 @@
+{
+  "trigger": true,
+  "modules": [
+    "add-to-group"
+  ],
+  "parentResource": "commonlogin3d9bdb1e2",
+  "functionName": "commonlogin3d9bdb1e2PostConfirmation",
+  "resourceName": "commonlogin3d9bdb1e2PostConfirmation",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "C:\\snapshot\\amplify-cli\\build\\node_modules\\@aws-amplify\\amplify-category-auth\\provider-utils\\awscloudformation\\triggers\\PostConfirmation",
+  "triggerTemplate": "PostConfirmation.json.ejs",
+  "triggerEventPath": "PostConfirmation.event.json",
+  "roleName": "commonlogin3d9bdb1e2PostConfirmation",
+  "skipEdit": true
+}

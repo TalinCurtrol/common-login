@@ -6,28 +6,20 @@ import {
   ThemeProvider,
   Theme,
   useTheme,
-  View,
+  View
 } from "@aws-amplify/ui-react";
+import { signUp } from '@aws-amplify/auth';
 import '@aws-amplify/ui-react/styles.css';
+import ReCAPTCHA from "react-google-recaptcha";
 
 
-const formFields = {
-  signUp: {
-    email: {
-      order: 1
-    },
-    preferred_username: {
-      order: 2
-    },
-    password: {
-      order: 3
-    },
-    confirm_password: {
-      order: 4
-    }
-  },
+
+
+
+
+function onChange(value) {
+  console.log("Captcha value:", value);
 }
-
 
 
 function CustomerEntry() {
@@ -71,33 +63,93 @@ function CustomerEntry() {
     },
   };
 
+  const formFields = {
+    signUp: {
+      email: {
+        order: 1
+      },
+      preferred_username: {
+        order: 2
+      },
+      password: {
+        order: 3
+      },
+      confirm_password: {
+        order: 4
+      }
+    },
+  }
+
+  const services = {
+    async handleSignUp(formData) {
+      console.log("formData=" + JSON.stringify(formData))
+      console.log()
+      return signUp({
+        username: formData.username,
+        password: formData.password,
+        options: {
+          autoSignIn: true,
+          userAttributes: {
+            email: formData.options.userAttributes.email,
+            preferred_username: formData.options.userAttributes.preferred_username,
+            'custom:account_type': 'Customer',
+          }
+
+        },
+        autoSignIn: {
+          enabled: true,
+        },
+      });
+    },
+    async validateCustomSignUp(formData) {
+      if (!formData.acknowledgement) {
+        return {
+          acknowledgement: 'You must agree to the Terms and Conditions',
+        };
+      }
+    },
+
+  }
+
   return (
     <div >
+
       <ThemeProvider theme={theme}>
         <View padding="xxl">
-          <Authenticator formFields={formFields} loginMechanisms={['email']} signUpAttributes={['preferred_username']} socialProviders={['apple', 'facebook', 'google']} components={{
-            SignUp: {
-              FormFields() {
-                const { validationErrors } = useAuthenticator();
 
-                return (
-                  <>
-                    {/* Re-use default `Authenticator.SignUp.FormFields` */}
-                    <Authenticator.SignUp.FormFields />
+          <ReCAPTCHA
+            sitekey="6LdycLopAAAAAK98JD8igrnEL5gNEG2X_N3kRooG"
+            onChange={onChange}
+          />
 
-                    {/* Append & require Terms and Conditions field to sign up  */}
-                    <CheckboxField
-                      errorMessage={validationErrors.acknowledgement}
-                      hasError={!!validationErrors.acknowledgement}
-                      name="acknowledgement"
-                      value="yes"
-                      label="I agree with the Terms and Conditions"
-                    />
-                  </>
-                );
+          <Authenticator
+            formFields={formFields}
+            loginMechanisms={['email']}
+            socialProviders={['facebook', 'google']}
+            components={{
+              SignUp: {
+                FormFields() {
+                  const { validationErrors } = useAuthenticator();
+
+                  return (
+                    <>
+                      {/* Re-use default `Authenticator.SignUp.FormFields` */}
+                      <Authenticator.SignUp.FormFields />
+
+                      {/* Append & require Terms and Conditions field to sign up  */}
+                      <CheckboxField
+                        errorMessage={validationErrors.acknowledgement}
+                        hasError={!!validationErrors.acknowledgement}
+                        name="acknowledgement"
+                        value="yes"
+                        label="I agree with the Terms and Conditions"
+                      />
+                    </>
+                  );
+                },
               },
-            },
-          }}>
+            }}
+            services={services}>
             {({ signOut, user }) => (
               <main>
                 <h1>Hello {user.username},</h1>

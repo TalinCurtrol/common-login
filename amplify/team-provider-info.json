@@ -9,11 +9,46 @@
       "UnauthRoleName": "amplify-commonlogin3-dev-d3442-unauthRole",
       "StackName": "amplify-commonlogin3-dev-d3442",
       "StackId": "arn:aws:cloudformation:us-east-1:730335573869:stack/amplify-commonlogin3-dev-d3442/b4987d00-efdc-11ee-9ce2-0e27dde01c81",
-      "AmplifyAppId": "d1hwq3cs2disqs"
+      "AmplifyAppId": "d1hwq3cs2disqs",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-commonlogin3-dev-d3442-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "commonlogin3d9bdb1e2": {}
+        "commonlogin3d9bdb1e2": {
+          "facebookAppId": "1145849236835431",
+          "googleClientId": "1030667561639-65gtoeg1h1smue8tc7j3q27bq8punf39.apps.googleusercontent.com"
+        },
+        "userPoolGroups": {}
+      },
+      "function": {
+        "commonlogin3d9bdb1e2CreateAuthChallenge": {
+          "deploymentBucketName": "amplify-commonlogin3-dev-d3442-deployment",
+          "s3Key": "amplify-builds/commonlogin3d9bdb1e2CreateAuthChallenge-49564a426f7176677831-build.zip"
+        },
+        "commonlogin3d9bdb1e2DefineAuthChallenge": {
+          "deploymentBucketName": "amplify-commonlogin3-dev-d3442-deployment",
+          "s3Key": "amplify-builds/commonlogin3d9bdb1e2DefineAuthChallenge-427a57465345794d5555-build.zip"
+        },
+        "commonlogin3d9bdb1e2PostConfirmation": {
+          "GROUP": "Customer",
+          "deploymentBucketName": "amplify-commonlogin3-dev-d3442-deployment",
+          "s3Key": "amplify-builds/commonlogin3d9bdb1e2PostConfirmation-6630706b6a674737754f-build.zip"
+        },
+        "commonlogin3d9bdb1e2VerifyAuthChallengeResponse": {
+          "RECAPTCHASECRET": "6LdycLopAAAAAKALkQB4C7Y50r3FzhgBFcIhva_C",
+          "deploymentBucketName": "amplify-commonlogin3-dev-d3442-deployment",
+          "s3Key": "amplify-builds/commonlogin3d9bdb1e2VerifyAuthChallengeResponse-6f6d7135586762735263-build.zip"
+        },
+        "AdminQueriese2f73908": {
+          "deploymentBucketName": "amplify-commonlogin3-dev-d3442-deployment",
+          "s3Key": "amplify-builds/AdminQueriese2f73908-7156587a6971782f6d56-build.zip"
+        }
+      },
+      "api": {
+        "AdminQueries": {}
+      },
+      "storage": {
+        "person": {}
       }
     }
   }
