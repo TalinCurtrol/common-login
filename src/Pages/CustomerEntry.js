@@ -121,7 +121,7 @@ function CustomerEntry() {
             sitekey="6LdycLopAAAAAK98JD8igrnEL5gNEG2X_N3kRooG"
             onChange={onChange}
           />
-
+          <h2>Customer:</h2>
           <Authenticator
             formFields={formFields}
             loginMechanisms={['email']}

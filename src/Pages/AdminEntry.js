@@ -121,11 +121,12 @@ function AdminEntry() {
                         sitekey="6LdycLopAAAAAK98JD8igrnEL5gNEG2X_N3kRooG"
                         onChange={onChange}
                     />
-
+                    <h2>Admin:</h2>
                     <Authenticator
                         formFields={formFields}
                         loginMechanisms={['email']}
                         socialProviders={['facebook', 'google']}
+                        hideSignUp={true}
                         components={{
                             SignUp: {
                                 FormFields() {

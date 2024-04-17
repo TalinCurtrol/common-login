@@ -122,7 +122,7 @@ function TechnicianEntry() {
             sitekey="6LdycLopAAAAAK98JD8igrnEL5gNEG2X_N3kRooG"
             onChange={onChange}
           />
-
+          <h2>Technician:</h2>
           <Authenticator
             formFields={formFields}
             loginMechanisms={['email']}
