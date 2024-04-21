@@ -125,7 +125,7 @@ function AdminEntry() {
                     <Authenticator
                         formFields={formFields}
                         loginMechanisms={['email']}
-                        socialProviders={['facebook', 'google']}
+                        socialProviders={[]}
                         hideSignUp={true}
                         components={{
                             SignUp: {

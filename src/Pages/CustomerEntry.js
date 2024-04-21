@@ -17,6 +17,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 
 
+
 function onChange(value) {
   console.log("Captcha value:", value);
 }
@@ -150,12 +151,19 @@ function CustomerEntry() {
               },
             }}
             services={services}>
-            {({ signOut, user }) => (
-              <main>
-                <h1>Hello {user.username},</h1>
-                <button onClick={signOut}>Sign out</button>
-              </main>
-            )}
+
+            {({ signOut, user }) => {
+              window.location.href = 'http://localhost:8080/home'
+              return (
+                <main>
+                  <h1>Rediecting...</h1>
+                  <button onClick={signOut}>Sign out</button>
+                </main>
+              )
+            }}
+
+
+
           </Authenticator>
         </View >
       </ThemeProvider >

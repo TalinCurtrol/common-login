@@ -126,6 +126,7 @@ function TechnicianEntry() {
           <Authenticator
             formFields={formFields}
             loginMechanisms={['email']}
+            socialProviders={[]}
             components={{
               SignUp: {
                 FormFields() {
