@@ -54,14 +54,15 @@ function TechnicianEntry() {
       body: JSON.stringify({ userName, password }),
     });
     const token = await data.text();
+    console.log("token=" + token)
 
-    if (token == null) {
-      window.alert('Wrong email or password')
+    if (token.length !== 0) {
 
-    } else {
       localStorage.setItem('user', JSON.stringify({ userName, token }))
       setLoggedIn(true)
       window.location.href = TECHNICIAN_URL + "?userName=" + userName + "&token=" + token;
+    } else {
+      window.alert('Wrong user name or password')
     }
   }
 
@@ -78,6 +79,27 @@ function TechnicianEntry() {
   }
 
   const onSignupClick = async () => {//注册成功自动登录
+    // Set initial error values to empty
+    setUserNameError('')
+    setPasswordError('')
+
+    // Check if the user has entered both fields correctly
+    if ('' === userName) {
+      setUserNameError('Please enter your email')
+      return
+    }
+
+    if ('' === password) {
+      setPasswordError('Please enter a password')
+      return
+    }
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/
+
+    if (!pattern.test(password)) {
+      setPasswordError(`The password must be a lowercase and uppercase letter, digit, special character, and 8 or more total characters.`)
+      return
+    }
+
     fetch(ROOT_URL + endpoints.register_customer, {
       method: 'POST',
       headers: {
@@ -110,7 +132,7 @@ function TechnicianEntry() {
     }
     const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/
 
-    if (pattern.test(password)) {
+    if (!pattern.test(password)) {
       setPasswordError('The password must be a lowercase and uppercase letter, digit, special character, and 8 or more total characters.')
       return
     }

@@ -55,13 +55,13 @@ function CustomerEntry() {
     });
     const token = await data.text();
 
-    if (token == null) {
-      window.alert('Wrong email or password')
+    if (token.length !== 0) {
 
-    } else {
       localStorage.setItem('user', JSON.stringify({ userName, token }))
       setLoggedIn(true)
       window.location.href = CUSTOMER_URL + "?userName=" + userName + "&token=" + token;
+    } else {
+      window.alert('Wrong user name or password')
     }
   }
 
@@ -78,6 +78,27 @@ function CustomerEntry() {
   }
 
   const onSignupClick = async () => {//注册成功自动登录
+    // Set initial error values to empty
+    setUserNameError('')
+    setPasswordError('')
+
+    // Check if the user has entered both fields correctly
+    if ('' === userName) {
+      setUserNameError('Please enter your email')
+      return
+    }
+
+    if ('' === password) {
+      setPasswordError('Please enter a password')
+      return
+    }
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/
+
+    if (!pattern.test(password)) {
+      setPasswordError(`The password must be a lowercase and uppercase letter, digit, special character, and 8 or more total characters.`)
+      return
+    }
+
     fetch(ROOT_URL + endpoints.register_customer, {
       method: 'POST',
       headers: {
@@ -110,8 +131,8 @@ function CustomerEntry() {
     }
     const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/
 
-    if (pattern.test(password)) {
-      setPasswordError('The password must be a lowercase and uppercase letter, digit, special character, and 8 or more total characters.')
+    if (!pattern.test(password)) {
+      setPasswordError(`The password must be a lowercase and uppercase letter, digit, special character, and 8 or more total characters.`)
       return
     }
 
@@ -238,10 +259,10 @@ function CustomerEntry() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <LoginPage />
+        {LoginPage()}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SignupPage />
+        {SignupPage()}
       </CustomTabPanel>
 
     </>)
@@ -255,10 +276,10 @@ function CustomerEntry() {
       return <LogoutPage />;
     }
     //没登录则显示tabs
-    return <EntryTabs />;
+    return (EntryTabs());
   }
 
-  return <PageSelector />
+  return (PageSelector())
 }
 
 export default CustomerEntry;
