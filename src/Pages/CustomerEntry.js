@@ -1,183 +1,264 @@
-import {
-  Button,
-  useAuthenticator,
-  CheckboxField,
-  Authenticator,
-  ThemeProvider,
-  Theme,
-  useTheme,
-  View
-} from "@aws-amplify/ui-react";
-import { signUp } from '@aws-amplify/auth';
-import '@aws-amplify/ui-react/styles.css';
-import ReCAPTCHA from "react-google-recaptcha";
+import React, { useEffect, useState } from 'react'
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+import { CUSTOMER_URL, ROOT_URL, endpoints } from '../Components/urls';
 
 
 
-
-
-
-
-function onChange(value) {
-  console.log("Captcha value:", value);
-}
 
 
 function CustomerEntry() {
-  const { tokens } = useTheme();
-  const theme = {
-    name: 'Auth Theme',
-    tokens: {
-      components: {
-        authenticator: {
-          router: {
-            boxShadow: `0 0 16px ${tokens.colors.overlay['10']}`,
-            borderWidth: '0',
-          },
-          form: {
-            padding: `${tokens.space.medium} ${tokens.space.xl} ${tokens.space.medium}`,
-          },
-        },
-        button: {
-          primary: {
-            backgroundColor: tokens.colors.pink['40'],
-          },
-          link: {
-            color: tokens.colors.pink['80'],
-          },
-        },
-        fieldcontrol: {
-          _focus: {
-            boxShadow: `0 0 0 2px ${tokens.colors.pink['40']}`,
-          },
-        },
-        tabs: {
-          item: {
-            color: tokens.colors.pink['40'],
-            _active: {
-              borderColor: tokens.colors.pink['80'],
-              color: tokens.colors.pink['80'],
-            },
-          },
-        },
-      },
-    },
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
+  const [userNameError, setUserNameError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
-  const formFields = {
-    signUp: {
-      email: {
-        order: 1
+  useEffect(() => {
+    // 从本地内存取用户和token
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    // 没有就logout
+    if (!user || !user.token) {
+      setLoggedIn(false)
+      return
+    }
+
+    // If the token exists, verify it with the auth server to see if it is valid
+    // fetch('http://localhost:3080/verify', {
+    //   method: 'POST',
+    //   headers: {
+    //     'jwt-token': user.token,
+    //   },
+    // })
+    //   .then((r) => r.json())
+    //   .then((r) => {
+    //     setLoggedIn('success' === r.message)
+    //     setEmail(user.email || '')
+    //   })
+  }, [])
+
+  const logIn = async () => {//获得token并存到本地存储
+    const data = await fetch(ROOT_URL + endpoints.login, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      preferred_username: {
-        order: 2
-      },
-      password: {
-        order: 3
-      },
-      confirm_password: {
-        order: 4
-      }
-    },
+      body: JSON.stringify({ userName, password }),
+    });
+    const token = await data.text();
+
+    if (token == null) {
+      window.alert('Wrong email or password')
+
+    } else {
+      localStorage.setItem('user', JSON.stringify({ userName, token }))
+      setLoggedIn(true)
+      window.location.href = CUSTOMER_URL + "?userName=" + userName + "&token=" + token;
+    }
   }
 
-  const services = {
-    async handleSignUp(formData) {
-      console.log("formData=" + JSON.stringify(formData))
-      console.log()
-      return signUp({
-        username: formData.username,
-        password: formData.password,
-        options: {
-          autoSignIn: true,
-          userAttributes: {
-            email: formData.options.userAttributes.email,
-            preferred_username: formData.options.userAttributes.preferred_username,
-            'custom:account_type': 'Customer',
-          }
+  const onLogoutClick = () => {//点击登出就清空信息
+    setLoggedIn(false)
+    localStorage.removeItem('user')
+  }
+  function LogoutPage() {//如果已经登陆就显示的登出按钮
+    return (
+      <div className={'inputContainer'}>
+        <input className={'inputButton'} type="button" onClick={onLogoutClick} value={'Log out'} />
+      </div>
+    )
+  }
 
-        },
-        autoSignIn: {
-          enabled: true,
-        },
-      });
-    },
-    async validateCustomSignUp(formData) {
-      if (!formData.acknowledgement) {
-        return {
-          acknowledgement: 'You must agree to the Terms and Conditions',
-        };
+  const onSignupClick = async () => {//注册成功自动登录
+    fetch(ROOT_URL + endpoints.register_customer, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userName, password }),
+    }).then((response) => {
+      if (!response.ok) throw new Error(response.status);
+      else {
+        logIn()
       }
-    },
+    });
 
   }
 
-  return (
-    <div >
+  const onLoginClick = () => {//点击之后检查再登录
+    // Set initial error values to empty
+    setUserNameError('')
+    setPasswordError('')
 
-      <ThemeProvider theme={theme}>
-        <View padding="xxl">
+    // Check if the user has entered both fields correctly
+    if ('' === userName) {
+      setUserNameError('Please enter your email')
+      return
+    }
 
-          <ReCAPTCHA
-            sitekey="6LdycLopAAAAAK98JD8igrnEL5gNEG2X_N3kRooG"
-            onChange={onChange}
+    if ('' === password) {
+      setPasswordError('Please enter a password')
+      return
+    }
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/
+
+    if (pattern.test(password)) {
+      setPasswordError('The password must be a lowercase and uppercase letter, digit, special character, and 8 or more total characters.')
+      return
+    }
+
+    logIn()
+
+  }
+
+  function SignupPage() {
+
+
+
+    return (
+      <div className={'mainContainer'}>
+        <div className={'titleContainer'}>
+          <div>Sign up</div>
+        </div>
+        <br />
+        <div className={'inputContainer'}>
+          <input
+            value={userName}
+            placeholder="Enter your user name here"
+            onChange={(ev) => setUserName(ev.target.value)}
+            className={'inputBox'}
           />
-          <h2>Customer:</h2>
-          <Authenticator
-            formFields={formFields}
-            loginMechanisms={['email']}
-            socialProviders={['facebook', 'google']}
-            components={{
-              SignUp: {
-                FormFields() {
-                  const { validationErrors } = useAuthenticator();
+          <label className="errorLabel">{userNameError}</label>
+        </div>
+        <br />
+        <div className={'inputContainer'}>
+          <input
+            value={password}
+            placeholder="Enter your password here"
+            onChange={(ev) => setPassword(ev.target.value)}
+            className={'inputBox'}
+          />
+          <label className="errorLabel">{passwordError}</label>
+        </div>
+        <br />
+        <div className={'inputContainer'}>
+          <input className={'inputButton'} type="button" onClick={onSignupClick} value={'Sign up'} />
+        </div>
+      </div>)
+  }
 
-                  return (
-                    <>
-                      {/* Re-use default `Authenticator.SignUp.FormFields` */}
-                      <Authenticator.SignUp.FormFields />
+  function LoginPage() {
+    return (
+      <div className={'mainContainer'}>
+        <div className={'titleContainer'}>
+          <div>Login</div>
+        </div>
+        <br />
+        <div className={'inputContainer'}>
+          <input
+            value={userName}
+            placeholder="Enter your user name here"
+            onChange={(ev) => setUserName(ev.target.value)}
+            className={'inputBox'}
+          />
+          <label className="errorLabel">{userNameError}</label>
+        </div>
+        <br />
+        <div className={'inputContainer'}>
+          <input
+            value={password}
+            placeholder="Enter your password here"
+            onChange={(ev) => setPassword(ev.target.value)}
+            className={'inputBox'}
+          />
+          <label className="errorLabel">{passwordError}</label>
+        </div>
+        <br />
+        <div className={'inputContainer'}>
+          <input className={'inputButton'} type="button" onClick={onLoginClick} value={'Log in'} />
+        </div>
+      </div>
+    )
+  }
 
-                      {/* Append & require Terms and Conditions field to sign up  */}
-                      <CheckboxField
-                        errorMessage={validationErrors.acknowledgement}
-                        hasError={!!validationErrors.acknowledgement}
-                        name="acknowledgement"
-                        value="yes"
-                        label="I agree with the Terms and Conditions"
-                      />
-                    </>
-                  );
-                },
-              },
-            }}
-            services={services}>
-
-            {({ signOut, user }) => {
-              window.location.href = 'http://localhost:8080/home'
-              return (
-                <main>
-                  <h1>Rediecting...</h1>
-                  <button onClick={signOut}>Sign out</button>
-                </main>
-              )
-            }}
 
 
 
-          </Authenticator>
-        </View >
-      </ThemeProvider >
-    </div>
-  );
+
+  const EntryTabs = () => {//显示一组tab，分别是登录和注册
+
+    CustomTabPanel.propTypes = {
+      children: PropTypes.node,
+      index: PropTypes.number.isRequired,
+      value: PropTypes.number.isRequired,
+    };
+
+    function a11yProps(index) {
+      return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+      };
+    }
+    function CustomTabPanel(props) {
+      const { children, value, index, ...other } = props;
+
+      return (
+        <div
+          role="tabpanel"
+          hidden={value !== index}
+          id={`simple-tabpanel-${index}`}
+          aria-labelledby={`simple-tab-${index}`}
+          {...other}
+        >
+          {value === index && (
+            <Box >
+              {children}
+            </Box>
+          )}
+        </div>
+      );
+    }
+
+
+
+    return (<>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} centered>
+          <Tab label="Log in" {...a11yProps(0)} />
+          <Tab label="Sign up" {...a11yProps(1)} />
+
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        <LoginPage />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <SignupPage />
+      </CustomTabPanel>
+
+    </>)
+  }
+
+
+  function PageSelector() {
+
+    if (loggedIn) {
+      //如果登陆了就显示登出
+      return <LogoutPage />;
+    }
+    //没登录则显示tabs
+    return <EntryTabs />;
+  }
+
+  return <PageSelector />
 }
 
 export default CustomerEntry;
-
-
-
-
-
-
-
-
-

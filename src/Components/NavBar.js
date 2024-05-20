@@ -29,10 +29,6 @@ const NavBar = () => {
                Technician Login
             </MenuItem>
             <Divider />
-            <MenuItem onClick={() => navigate("/AdminEntry")}>
-               Admin Login
-            </MenuItem>
-            <Divider />
          </Menu>
 
 
