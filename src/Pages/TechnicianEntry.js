@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import { TECHNICIAN_URL, ROOT_URL, endpoints } from '../Components/urls';
-
+import ReCAPTCHA from 'react-google-recaptcha'
 
 
 
@@ -171,6 +171,8 @@ function TechnicianEntry() {
           <label className="errorLabel">{passwordError}</label>
         </div>
         <br />
+
+
         <div className={'inputContainer'}>
           <input className={'inputButton'} type="button" onClick={onSignupClick} value={'Sign up'} />
         </div>

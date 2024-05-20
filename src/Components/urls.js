@@ -3,7 +3,7 @@ export const TECHNICIAN_URL = ""//technician portal url
 export const CUSTOMER_URL = ""
 export const ADMIN_URL = ""
 
-export const RECAPTURE = ''
+
 
 export const endpoints = {
     login: "/auth/login",
