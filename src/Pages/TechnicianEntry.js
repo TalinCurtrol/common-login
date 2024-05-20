@@ -126,7 +126,7 @@ function TechnicianEntry() {
     return (
       <div className={'mainContainer'}>
         <div className={'titleContainer'}>
-          <div>Sign up</div>
+          <div>Sign up as technician</div>
         </div>
         <br />
         <div className={'inputContainer'}>
@@ -159,7 +159,7 @@ function TechnicianEntry() {
     return (
       <div className={'mainContainer'}>
         <div className={'titleContainer'}>
-          <div>Login</div>
+          <div>Login as technician</div>
         </div>
         <br />
         <div className={'inputContainer'}>

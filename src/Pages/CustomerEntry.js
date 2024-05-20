@@ -126,7 +126,7 @@ function CustomerEntry() {
     return (
       <div className={'mainContainer'}>
         <div className={'titleContainer'}>
-          <div>Sign up</div>
+          <div>Sign up as customer</div>
         </div>
         <br />
         <div className={'inputContainer'}>
@@ -159,7 +159,7 @@ function CustomerEntry() {
     return (
       <div className={'mainContainer'}>
         <div className={'titleContainer'}>
-          <div>Login</div>
+          <div>Login as customer</div>
         </div>
         <br />
         <div className={'inputContainer'}>
