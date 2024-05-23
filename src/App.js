@@ -3,7 +3,7 @@ import './App.css';
 
 import { Routes, Route } from 'react-router-dom';
 import React, { useState } from "react";
-import NavBar from './Components/NavBar';
+import NavBar from './components/NavBar';
 import CustomerEntry from './Pages/CustomerEntry';
 import TechnicianEntry from './Pages/TechnicianEntry';
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from "react-google-recaptcha-v3";

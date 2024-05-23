@@ -1,4 +1,4 @@
-export const ROOT_URL = "http://localhost:8080";
+export const ROOT_URL = "https://948ebcf0-4742-44cf-a3e7-738deb7ff5f1.mock.pstmn.io";
 export const TECHNICIAN_URL = ""//technician portal url
 export const CUSTOMER_URL = ""
 export const ADMIN_URL = ""
