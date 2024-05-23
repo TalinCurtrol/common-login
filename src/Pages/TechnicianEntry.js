@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import { TECHNICIAN_URL, ROOT_URL, endpoints } from '../Components/urls';
-import ReCAPTCHA from 'react-google-recaptcha'
+import { isValidToken } from "@/utils/jwtUtils";
 
 
 
@@ -32,17 +32,13 @@ function TechnicianEntry() {
     }
 
     // If the token exists, verify it with the auth server to see if it is valid
-    // fetch('http://localhost:3080/verify', {
-    //   method: 'POST',
-    //   headers: {
-    //     'jwt-token': user.token,
-    //   },
-    // })
-    //   .then((r) => r.json())
-    //   .then((r) => {
-    //     setLoggedIn('success' === r.message)
-    //     setEmail(user.email || '')
-    //   })
+    if (isValidToken(user.token)) {
+      setLoggedIn(true)
+      window.location.href = TECHNICIAN_URL + "?userName=" + user.userName + "&token=" + user.token;
+    } else {
+      setLoggedIn(false)
+      return
+    }
   }, [])
 
   const logIn = async () => {//获得token并存到本地存储
