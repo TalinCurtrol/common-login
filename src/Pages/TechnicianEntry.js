@@ -22,23 +22,23 @@ function TechnicianEntry() {
 
   useEffect(() => {
     // 从本地内存取用户和token
-    var user = ''
-    if (localStorage.getItem('user')) {
-      user = JSON.parse(localStorage.getItem('user'))
+    var tech = ''
+    if (localStorage.getItem('tech')) {
+      tech = JSON.parse(localStorage.getItem('tech'))
     }
-    console.log("usertoken=" + user.token)
+    console.log("usertoken=" + tech.token)
 
     // 没有就logout
-    if (!user || !user.token) {
+    if (!tech || !tech.token) {
       console.log("当前没登陆")
       setLoggedIn(false)
       return
     }
 
     // If the token exists, verify it with the auth server to see if it is valid
-    if (user.token.length > 0 && isValidToken(user.token)) {
+    if (tech.token.length > 0 && isValidToken(tech.token)) {
       setLoggedIn(true)
-      window.location.href = TECHNICIAN_URL + "?userName=" + user.userName + "&token=" + user.token;
+      window.location.href = TECHNICIAN_URL + "?userName=" + tech.userName + "&token=" + tech.token;
     } else {
       console.log("token不合法")
       setLoggedIn(false)
@@ -61,7 +61,7 @@ function TechnicianEntry() {
 
     if (token.length !== 0) {
 
-      localStorage.setItem('user', JSON.stringify({ userName, token }))
+      localStorage.setItem('tech', JSON.stringify({ userName, token }))
       setLoggedIn(true)
       window.location.href = TECHNICIAN_URL + "?userName=" + userName + "&token=" + token;
     } else {
@@ -96,7 +96,7 @@ function TechnicianEntry() {
             <div className={'inputContainer'}>
               <input className={'inputButton'} type="button" onClick={() => {//点击登出就清空信息
                 setLoggedIn(false)
-                localStorage.removeItem('user')
+                localStorage.removeItem('tech')
               }} value={'Log out'} />
             </div>
           </>)
