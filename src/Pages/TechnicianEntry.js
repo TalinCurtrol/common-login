@@ -23,8 +23,8 @@ function TechnicianEntry() {
   useEffect(() => {
     // 从本地内存取用户和token
     var user = ''
-    if (sessionStorage.getItem('user')) {
-      user = JSON.parse(sessionStorage.getItem('user'))
+    if (localStorage.getItem('user')) {
+      user = JSON.parse(localStorage.getItem('user'))
     }
     console.log("usertoken=" + user.token)
 
@@ -61,7 +61,7 @@ function TechnicianEntry() {
 
     if (token.length !== 0) {
 
-      sessionStorage.setItem('user', JSON.stringify({ userName, token }))
+      localStorage.setItem('user', JSON.stringify({ userName, token }))
       setLoggedIn(true)
       window.location.href = TECHNICIAN_URL + "?userName=" + userName + "&token=" + token;
     } else {
@@ -96,7 +96,7 @@ function TechnicianEntry() {
             <div className={'inputContainer'}>
               <input className={'inputButton'} type="button" onClick={() => {//点击登出就清空信息
                 setLoggedIn(false)
-                sessionStorage.removeItem('user')
+                localStorage.removeItem('user')
               }} value={'Log out'} />
             </div>
           </>)
