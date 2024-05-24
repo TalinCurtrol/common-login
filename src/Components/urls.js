@@ -1,7 +1,7 @@
-export const ROOT_URL = "https://948ebcf0-4742-44cf-a3e7-738deb7ff5f1.mock.pstmn.io";
-export const TECHNICIAN_URL = ""//technician portal url
+export const ROOT_URL = "http://localhost:5000";
+export const TECHNICIAN_URL = "http://localhost:3000"//technician portal url
 export const CUSTOMER_URL = ""
-export const ADMIN_URL = ""
+
 
 
 

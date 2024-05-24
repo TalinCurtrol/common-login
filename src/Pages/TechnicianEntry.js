@@ -23,8 +23,8 @@ function TechnicianEntry() {
   useEffect(() => {
     // 从本地内存取用户和token
     var user = ''
-    if (localStorage.getItem('user')) {
-      user = JSON.parse(localStorage.getItem('user'))
+    if (sessionStorage.getItem('user')) {
+      user = JSON.parse(sessionStorage.getItem('user'))
     }
     console.log("usertoken=" + user.token)
 
@@ -47,6 +47,8 @@ function TechnicianEntry() {
   }, [])
 
   const logIn = async () => {//获得token并存到本地存储
+
+    console.log("a=" + JSON.stringify({ userName, password }))
     const data = await fetch(ROOT_URL + endpoints.login, {
       method: 'POST',
       headers: {
@@ -56,9 +58,10 @@ function TechnicianEntry() {
     });
     const token = await data.text();
 
+
     if (token.length !== 0) {
 
-      localStorage.setItem('user', JSON.stringify({ userName, token }))
+      sessionStorage.setItem('user', JSON.stringify({ userName, token }))
       setLoggedIn(true)
       window.location.href = TECHNICIAN_URL + "?userName=" + userName + "&token=" + token;
     } else {
@@ -93,7 +96,7 @@ function TechnicianEntry() {
             <div className={'inputContainer'}>
               <input className={'inputButton'} type="button" onClick={() => {//点击登出就清空信息
                 setLoggedIn(false)
-                localStorage.removeItem('user')
+                sessionStorage.removeItem('user')
               }} value={'Log out'} />
             </div>
           </>)
@@ -159,7 +162,7 @@ function TechnicianEntry() {
                           setPasswordError('Please enter a password')
                           return
                         }
-                        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/
+                        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 
                         if (!pattern.test(password)) {
                           setPasswordError(`The password must be a lowercase and uppercase letter, digit, special character, and 8 or more total characters.`)
