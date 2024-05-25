@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import NavBar from './components/NavBar';
 import CustomerEntry from './Pages/CustomerEntry';
 import TechnicianEntry from './Pages/TechnicianEntry';
+import Logout from './Pages/Logout';
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from "react-google-recaptcha-v3";
 
 
@@ -33,6 +34,7 @@ function App() {
       <Routes>
         <Route path="/" element={<CustomerEntry />} />
         <Route path="/TechnicianEntry" element={<TechnicianEntry />} />
+        <Route path="/Logout" element={<Logout />} />
 
       </Routes>
 

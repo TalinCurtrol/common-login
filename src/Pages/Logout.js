@@ -7,12 +7,17 @@ import { useNavigate } from "react-router-dom";
 
 
 function Logout() {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        sessionStorage.clear('tech')
-        sessionStorage.clear('user')
-        navigate("/TechnicianEntry")
+        localStorage.removeItem('tech')
+        localStorage.removeItem('user')
+        const timer = setTimeout(() => {
+            navigate('/TechnicianEntry')
+        }, 2000); // 3000 毫秒等于 3 秒
+
+        // 清理定时器，以防组件在定时器触发前卸载
+        return () => clearTimeout(timer);
 
     }, [])
     return (<>Log out on going</>);
