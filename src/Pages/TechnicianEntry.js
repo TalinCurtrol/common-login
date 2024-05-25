@@ -41,6 +41,7 @@ function TechnicianEntry() {
       window.location.href = TECHNICIAN_URL + "?userName=" + tech.userName + "&token=" + tech.token;
     } else {
       console.log("token不合法")
+      localStorage.clear("tech")
       setLoggedIn(false)
       return
     }
@@ -137,6 +138,7 @@ function TechnicianEntry() {
                     <br />
                     <div className={'inputContainer'}>
                       <input
+                        type="password"
                         value={password}
                         placeholder="Enter your password here"
                         onChange={(ev) => setPassword(ev.target.value)}
