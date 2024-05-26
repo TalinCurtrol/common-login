@@ -2,11 +2,11 @@
 import './App.css';
 
 import { Routes, Route } from 'react-router-dom';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from './components/NavBar';
 import CustomerEntry from './Pages/CustomerEntry';
 import TechnicianEntry from './Pages/TechnicianEntry';
-import Logout from './Pages/Logout';
+import { CURRENT_BASE_URL } from './components/urls';
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from "react-google-recaptcha-v3";
 
 
@@ -21,6 +21,12 @@ function App() {
     setToken(getToken);
   };
 
+  useEffect(() => {
+    localStorage.removeItem('tech')
+    localStorage.removeItem('user')
+  }, [])
+
+
   return (
     <div className="App">
       <GoogleReCaptchaProvider reCaptchaKey={process.env.REACT_APP_SITE_KEY}>
@@ -34,7 +40,7 @@ function App() {
       <Routes>
         <Route path="/" element={<CustomerEntry />} />
         <Route path="/TechnicianEntry" element={<TechnicianEntry />} />
-        <Route path="/Logout" element={<Logout />} />
+
 
       </Routes>
 
